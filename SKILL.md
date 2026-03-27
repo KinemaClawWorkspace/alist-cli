@@ -1,11 +1,12 @@
 ---
-name: alist
+name: alist-cli
+displayName: AList-CLI (CLI command for self-hosted cloud storage)
 description: |
   AList file management API. AList is a file listing program that supports multiple storage backends, with features including upload, download, preview, and more.
   Trigger: User asks about file management, upload/download, AList operations.
 ---
 
-# AList CLI for OpenClaw | AList CLI 文件管理工具
+# AList-CLI (CLI command for self-hosted cloud storage) | AList CLI（自托管云存储命令工具）
 
 AList API-based file management tool for OpenClaw AI assistant.
 
