@@ -1,5 +1,6 @@
 ---
 name: alist-cli
+displayName: AList CLI (Self-hosted, Cloud File Storage)
 description: |
   AList file management API for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search, and offline download.
   Trigger: User asks about file management, AList operations, upload/download files, or cloud storage tasks.
