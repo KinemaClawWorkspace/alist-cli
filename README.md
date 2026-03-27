@@ -1,6 +1,6 @@
-# AList API Skill for OpenClaw
+# AList CLI for OpenClaw
 
-基于 AList API (v3) 的文件管理工具，供 OpenClaw AI 助手使用。
+基于 AList API 的文件管理工具，供 OpenClaw AI 助手使用。
 
 ## 功能
 
@@ -13,47 +13,62 @@
 - 获取文件直链
 - 离线下载
 
-## 快速开始
+## 安装
 
-### 配置
-
-```yaml
-# config.yml
-alist:
-  url: "https://your-alist.example.com"
-  username: "admin"
-  password: "your_password"
+```bash
+npm i -g alist-cli
 ```
 
-### 使用
+## 配置
 
-```
-AList 登录
-AList 列出文件 /
-AList 上传文件 local.txt 到 /remote.txt
-AList 获取直链 /file.txt
-AList 创建文件夹 /new_folder
-AList 删除 /file.txt
-AList 移动 /old.txt 到 /new.txt
-AList 搜索 keyword
+在 `scripts/openclaw-docker.sh` 中配置环境变量：
+
+```bash
+export ALIST_URL="https://your_alist_server"
+export ALIST_USERNAME="your_username"
+export ALIST_PASSWORD="your_password"
 ```
 
-## 文件结构
+## 使用
+
+```bash
+alist login
+alist ls /
+alist upload local.txt /remote.txt
+alist get /file.txt
+alist mkdir /folder
+alist rm /file.txt
+alist mv /old /new
+alist search keyword
+alist whoami
+```
+
+## CLI 选项
+
+| 命令 | 说明 |
+|------|------|
+| login <user> <pass> | 登录 |
+| ls [path] | 列出文件 |
+| get <path> | 获取文件信息 |
+| mkdir <path> | 创建文件夹 |
+| upload <local> <remote> | 上传文件 |
+| rm <path> | 删除文件 |
+| mv <src> <dst> | 移动文件 |
+| search <keyword> [path] | 搜索 |
+| whoami | 当前用户 |
+
+## 项目结构
 
 ```
-alist-skill/
-├── README.md              # 本文件
-├── SKILL.md              # 完整技能文档
+alist-cli/
+├── README.md
+├── SKILL.md
 ├── scripts/
-│   └── alist_cli.py     # CLI 工具
+│   └── alist_cli.py
 └── references/
-    └── openapi.json      # API 完整规范
+    └── openapi.json
 ```
-
-## API 文档
-
-详见 [SKILL.md](./SKILL.md) 或 [AList 官方文档](https://alist.nn.ci/)。
 
 ## License
 
-MIT
+CC BY 4.0 - 必须著名来源，允许自由使用
