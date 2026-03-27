@@ -23,6 +23,25 @@ description: |
 
 这些变量需要在 `scripts/openclaw-docker.sh` 中配置，重启容器后自动加载。
 
+## 首次设置
+
+### 1. 创建 AList 用户
+
+1. 访问 https://cloud.xn--30q18ry71c.com/@manage/users
+2. 点击 "新建用户"
+3. 填写用户名和密码
+4. 设置角色（管理员/普通用户）
+
+### 2. 配置环境变量
+
+在 `scripts/openclaw-docker.sh` 中添加：
+
+```bash
+export ALIST_URL="https://cloud.xn--30q18ry71c.com"
+export ALIST_USERNAME="your_username"
+export ALIST_PASSWORD="your_password"
+```
+
 ---
 
 ## API 概览
