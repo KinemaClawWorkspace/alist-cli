@@ -23,6 +23,8 @@ import requests
 
 # 配置
 DEFAULT_URL = os.environ.get("ALIST_URL", "https://cloud.xn--30q18ry71c.com")
+DEFAULT_USERNAME = os.environ.get("ALIST_USERNAME", "claw")
+DEFAULT_PASSWORD = os.environ.get("ALIST_PASSWORD", "")
 TOKEN_FILE = os.path.expanduser("~/.alist_token")
 
 
@@ -220,10 +222,13 @@ def main():
     alist = AList()
     
     if args.command == "login":
-        if len(args.args) < 2:
-            print("用法: alist login <username> <password>")
+        # 如果没有提供参数，使用环境变量
+        username = args.args[0] if len(args.args) > 0 else DEFAULT_USERNAME
+        password = args.args[1] if len(args.args) > 1 else DEFAULT_PASSWORD
+        if not username or not password:
+            print("❌ 请提供用户名和密码，或设置环境变量 ALIST_USERNAME 和 ALIST_PASSWORD")
             sys.exit(1)
-        alist.login(args.args[0], args.args[1])
+        alist.login(username, password)
     
     elif args.command == "whoami":
         alist.whoami()

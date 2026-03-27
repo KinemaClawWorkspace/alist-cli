@@ -13,13 +13,15 @@ description: |
 
 需要配置 AList 服务地址和认证信息。
 
-### 环境变量（可选）
+### 环境变量（必需）
 
 | 变量 | 说明 | 默认值 |
 |------|------|--------|
 | `ALIST_URL` | AList 服务地址 | `https://cloud.xn--30q18ry71c.com` |
 | `ALIST_USERNAME` | 用户名 | `claw` |
 | `ALIST_PASSWORD` | 密码 | (需配置) |
+
+这些变量需要在 `scripts/openclaw-docker.sh` 中配置，重启容器后自动加载。
 
 ---
 
