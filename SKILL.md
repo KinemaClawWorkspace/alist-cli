@@ -1,6 +1,6 @@
 ---
 name: alist-cli
-version: 1.1.0
+version: 1.1.2
 description: |
   AList file management CLI for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search.
   Auth via environment variables with auto-refresh. Trigger: file management, AList operations, upload/download.
