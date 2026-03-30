@@ -1,12 +1,16 @@
 ---
 name: alist-cli
-version: 1.0.1
+displayName: "AList-CLI (File Management API)"
+version: 1.0.2
 description: |
   AList file management API for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search, and offline download.
   Trigger: User asks about file management, AList operations, upload/download files, or cloud storage tasks.
 ---
 
 # AList CLI
+
+- **Author**: [LeeShunEE](https://github.com/LeeShunEE)
+- **Organization**: [KinemaClawWorkspace](https://github.com/KinemaClawWorkspace)
 
 File management tool for AList API.
 
