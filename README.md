@@ -8,23 +8,32 @@
 - 文件列表/浏览
 - 文件上传/下载
 - 创建文件夹
-- 删除/移动/复制文件
+- 删除/移动文件
 - 搜索文件
 - 获取文件直链
-- 离线下载
 
 ## 安装
 
 ```bash
-npm i -g alist-cli
+# 1. 克隆仓库
+git clone https://github.com/KinemaClawWorkspace/alist-cli.git
+cd alist-cli
+
+# 2. 安装依赖
+pip install -r requirements.txt
+
+# 3. 配置环境变量
+export ALIST_URL="https://your-alist-server"
+export ALIST_USERNAME="your_username"
+export ALIST_PASSWORD="your_password"
 ```
 
 ## 配置
 
-在 `scripts/openclaw-docker.sh` 中配置环境变量：
+设置环境变量：
 
 ```bash
-export ALIST_URL="https://your_alist_server"
+export ALIST_URL="https://your-alist-server"
 export ALIST_USERNAME="your_username"
 export ALIST_PASSWORD="your_password"
 ```
@@ -63,6 +72,8 @@ alist whoami
 alist-cli/
 ├── README.md
 ├── SKILL.md
+├── LICENSE
+├── requirements.txt
 ├── scripts/
 │   └── alist_cli.py
 └── references/

@@ -1,9 +1,9 @@
 ---
 name: alist-cli
 displayName: "AList-CLI (Cloud Storage CLI for AList, with OpenClaw Skill)"
-version: 1.0.2
+version: 1.1.0
 description: |
-  AList file management API for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search, and offline download.
+  AList file management API for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search, and base_path auto-handling.
   Trigger: User asks about file management, AList operations, upload/download files, or cloud storage tasks.
 ---
 
@@ -14,12 +14,18 @@ description: |
 
 File management tool for AList API.
 
+## Prerequisites
+
+```bash
+pip install requests
+```
+
 ## Environment Variables
 
 ```bash
-ALIST_URL="https://your_alist_server"
-ALIST_USERNAME="your_username"
-ALIST_PASSWORD="your_password"
+ALIST_URL="https://your-alist-server"      # Required: AList server URL
+ALIST_USERNAME="your_username"              # Required: AList username
+ALIST_PASSWORD="your_password"              # Required: AList password
 ```
 
 ## Commands

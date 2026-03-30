@@ -26,8 +26,8 @@ import urllib.parse
 import requests
 
 # 配置
-DEFAULT_URL = os.environ.get("ALIST_URL", "https://cloud.xn--30q18ry71c.com")
-DEFAULT_USERNAME = os.environ.get("ALIST_USERNAME", "claw")
+DEFAULT_URL = os.environ.get("ALIST_URL", "")
+DEFAULT_USERNAME = os.environ.get("ALIST_USERNAME", "")
 DEFAULT_PASSWORD = os.environ.get("ALIST_PASSWORD", "")
 TOKEN_FILE = os.path.expanduser("~/.alist_token")
 USER_INFO_FILE = os.path.expanduser("~/.alist_user_info")
@@ -35,6 +35,10 @@ USER_INFO_FILE = os.path.expanduser("~/.alist_user_info")
 
 class AList:
     def __init__(self, url=DEFAULT_URL):
+        if not url:
+            print("❌ 请设置 ALIST_URL 环境变量")
+            print("   export ALIST_URL=\"https://your-alist-server\"")
+            sys.exit(1)
         self.url = url.rstrip('/')
         self.token = self._load_token()
         self.base_path = self._load_user_info().get('base_path', '')
@@ -290,6 +294,9 @@ def main():
         password = args.args[1] if len(args.args) > 1 else DEFAULT_PASSWORD
         if not username or not password:
             print("❌ 请提供用户名和密码，或设置环境变量 ALIST_USERNAME 和 ALIST_PASSWORD")
+            print("   export ALIST_URL=\"https://your-alist-server\"")
+            print("   export ALIST_USERNAME=\"your_username\"")
+            print("   export ALIST_PASSWORD=\"your_password\"")
             sys.exit(1)
         alist.login(username, password)
     
