@@ -1,5 +1,8 @@
 # AList CLI for OpenClaw
 
+> **ClawHub**: https://clawhub.ai/leeshunee/alist-cli | `clawhub install alist-cli`
+
+
 基于 AList API 的文件管理工具，供 OpenClaw AI 助手使用。
 
 ## 功能
