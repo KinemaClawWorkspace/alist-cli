@@ -156,9 +156,9 @@ class AList:
     # ── URL 生成 ─────────────────────────────────────────────
 
     def browse_url(self, user_path):
-        """网页浏览 URL (AList 前端 SPA hash router)"""
+        """网页浏览 URL"""
         real_path = self._to_real_path(user_path)
-        return f"{self.url}/#/{real_path.lstrip('/')}"
+        return f"{self.url}{real_path}"
 
     def _make_signed_url(self, real_path, sign, prefix):
         """生成带签名的预览/下载 URL"""

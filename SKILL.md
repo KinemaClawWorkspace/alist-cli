@@ -92,12 +92,11 @@ AList 有三种 URL 类型，本工具自动生成正确的 URL：
 ### 1. 网页浏览 URL（永久有效）
 
 ```
-{ALIST_URL}/#/{real_path}
+{ALIST_URL}{real_path}
 ```
 
-- AList 前端是 Vue SPA，使用 hash router
 - `real_path` = `base_path` + `user_path`（去掉前导 `/`）
-- 例: `https://cloud.example.com/#/storage/docs/notes.md`
+- 例: `https://cloud.example.com/storage/docs/notes.md`
 - **推荐分享链接**：永久有效，可直接在浏览器打开浏览文件
 
 ### 2. 预览直链（临时，需签名）
