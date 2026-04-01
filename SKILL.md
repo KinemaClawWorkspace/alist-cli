@@ -20,46 +20,20 @@ AList file management CLI. Auth token managed via environment variables with aut
 | `ALIST_AUTH_TOKEN` | ❌ | Auth token (auto-obtained via login, skip manual set) |
 | `ALIST_USER_INFO` | ❌ | User info JSON (auto-obtained via login, skip manual set) |
 
-## ⚡ Pre-flight: Ensure Python + Dependencies
+## Onboarding
 
-**Before running the script, ensure `requests` is available. Follow this order:**
+首次使用前，按 **[ONBOARDING.md](ONBOARDING.md)** 完成 6 步环境配置：
 
-### Step 1: Check if requests is importable
+1. 检查 Python 环境
+2. 安装 `requests` 依赖
+3. 创建 `alist-cli` 命令（symlink）
+4. 配置 `ALIST_URL` / `ALIST_USERNAME` / `ALIST_PASSWORD`
+5. 验证连接（`alist-cli whoami`）
+6. 确认目录结构
 
-```bash
-python3 -c "import requests" 2>/dev/null && echo "OK" || echo "NEED_INSTALL"
+**一键安装（ClawHub）：**
 ```
-
-If "OK", skip to [Run Commands](#run-commands).
-If "NEED_INSTALL", proceed to Step 2.
-
-### Step 2: Try system install
-
-```bash
-uv pip install --system requests 2>/dev/null \
-  || pip3 install requests 2>/dev/null \
-  || sudo pip3 install --break-system-packages requests
-```
-
-If any succeeds, skip to [Run Commands](#run-commands).
-If all fail (PEP 668 / no permissions), proceed to Step 3.
-
-### Step 3: Use uv venv (isolated, no system Python needed)
-
-```bash
-# Install uv if missing
-command -v uv >/dev/null 2>&1 || curl -LsSf https://astral.sh/uv/install.sh | sh
-export PATH="$HOME/.local/bin:$PATH"
-
-# Create venv in skill directory and install deps
-SKILL_DIR="<skill_directory>"  # e.g. ~/.openclaw/workspace/skills/alist-cli
-cd "$SKILL_DIR" && uv venv .venv && uv pip install requests
-```
-
-When using venv, **always** call the script via venv python:
-
-```bash
-"$SKILL_DIR/.venv/bin/python" "$SKILL_DIR/scripts/alist_cli.py" <command> [args]
+clawhub install alist-cli
 ```
 
 ## Run Commands
