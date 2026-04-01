@@ -156,22 +156,9 @@ class AList:
     # ── URL 生成 ─────────────────────────────────────────────
 
     def browse_url(self, user_path):
-        """网页浏览 URL"""
+        """网页浏览 URL（需要登录态）"""
         real_path = self._to_real_path(user_path)
         return f"{self.url}{real_path}"
-
-    def _make_signed_url(self, real_path, sign, prefix):
-        """生成带签名的预览/下载 URL"""
-        if sign:
-            return f"{self.url}/{prefix}{real_path}?sign={sign}"
-        return f"{self.url}/{prefix}{real_path}"
-
-    @staticmethod
-    def _resolve_real_path_for_item(item):
-        """从 fs/get 或 fs/list 返回的 item 中提取 real_path"""
-        parent = item.get('parent', '')
-        name = item.get('name', '')
-        return f"{parent}/{name}".rstrip('/') if parent else f"/{name}"
 
     # ── HTTP 请求（带自动刷新） ───────────────────────────────
 
@@ -244,14 +231,10 @@ class AList:
         print(f"   类型: {'文件夹' if f['is_dir'] else '文件'}")
         print(f"   修改: {f.get('modified', '')}")
         # URL 输出
-        sign = f.get('sign', '')
-        print(f"   网页浏览: {self.browse_url(path)}")
-        if not f['is_dir']:
-            if sign:
-                print(f"   预览直链: {self._make_signed_url(real_path, sign, 'd')}")
-                print(f"   下载直链: {self._make_signed_url(real_path, sign, 'p')}")
-            elif f.get('raw_url'):
-                print(f"   直链: {f['raw_url']}")
+        raw_url = f.get('raw_url', '')
+        print(f"   网页浏览: {self.browse_url(path)} (需登录)")
+        if not f['is_dir'] and raw_url:
+            print(f"   直链: {raw_url}")
         return f
 
     def mkdir(self, path):
@@ -288,12 +271,10 @@ class AList:
             })
             if file_info['code'] == 200:
                 f = file_info['data']
-                sign = f.get('sign', '')
-                print(f"   网页浏览: {self.browse_url(remote_path)}")
-                if sign:
-                    print(f"   下载直链: {self._make_signed_url(real_path, sign, 'p')}")
-                elif f.get('raw_url'):
-                    print(f"   直链: {f['raw_url']}")
+                raw_url = f.get('raw_url', '')
+                print(f"   网页浏览: {self.browse_url(remote_path)} (需登录)")
+                if raw_url:
+                    print(f"   直链: {raw_url}")
             return True
         print(f"❌ {data['message']}")
         return False
@@ -370,12 +351,11 @@ class AList:
 
         f = data['data']
         print(f"📄 {f['name']}")
-        print(f"   网页浏览: {self.browse_url(path)}")
+        print(f"   网页浏览: {self.browse_url(path)} (需登录)")
         if not f['is_dir']:
-            sign = f.get('sign', '')
-            if sign:
-                print(f"   预览直链: {self._make_signed_url(real_path, sign, 'd')}")
-                print(f"   下载直链: {self._make_signed_url(real_path, sign, 'p')}")
+            raw_url = f.get('raw_url', '')
+            if raw_url:
+                print(f"   直链: {raw_url}")
         return f
 
     @staticmethod

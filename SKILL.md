@@ -87,9 +87,9 @@ python3 scripts/alist_cli.py <command> [args]
 
 ## URL Rules
 
-AList 有三种 URL 类型，本工具自动生成正确的 URL：
+AList 有两种 URL 类型：
 
-### 1. 网页浏览 URL（永久有效）
+### 1. 网页浏览 URL（需要登录态）
 
 ```
 {ALIST_URL}{real_path}
@@ -97,27 +97,20 @@ AList 有三种 URL 类型，本工具自动生成正确的 URL：
 
 - `real_path` = `base_path` + `user_path`（去掉前导 `/`）
 - 例: `https://cloud.example.com/storage/docs/notes.md`
-- **推荐分享链接**：永久有效，可直接在浏览器打开浏览文件
+- ⚠️ 需要登录 AList 后才能访问，不能分享给未登录用户
 
-### 2. 预览直链（临时，需签名）
-
-```
-{ALIST_URL}/d{real_path}?sign={sign}
-```
-
-- 用于在线预览（嵌入 iframe 等）
-- sign 由服务端生成，有时效性
-- 例: `https://cloud.example.com/d/storage/docs/notes.md?sign=abc123=:0`
-
-### 3. 下载直链（临时，需签名）
+### 2. 直链（无需登录，签名认证，临时有效）
 
 ```
-{ALIST_URL}/p{real_path}?sign={sign}
+API 返回的 raw_url 字段
 ```
 
-- 用于直接下载文件（curl/wget 可用）
-- sign 由服务端生成，有时效性
-- 例: `https://cloud.example.com/p/storage/docs/notes.md?sign=abc123=:0`
+- 由 AList 服务端生成，包含签名（sign 参数）
+- 无需登录即可下载/预览文件
+- 签名有时效性，过期后需重新获取
+- 例: `https://cloud.example.com/p/storage/storage/docs/notes.md?sign=abc123=:0`
+- **推荐分享链接**：给他人分享文件时使用此链接
+- ⚠️ 不可手动拼接签名 URL，签名与完整路径绑定，必须使用 API 返回的 raw_url
 
 ### Path Mapping
 
@@ -128,7 +121,7 @@ user_path (用户输入)  →  _to_real_path()  →  real_path (AList API 使用
 
 - `base_path` 通过登录自动获取（`/api/me` 接口）
 - 用户路径中的 `base_path` 前缀会被保留并叠加
-- 网页浏览和签名 URL 均基于 `real_path`
+- 网页浏览基于 `real_path`，直链使用 API 返回的 `raw_url`
 
 ## Auth Behavior
 
