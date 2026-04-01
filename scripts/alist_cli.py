@@ -155,10 +155,21 @@ class AList:
 
     # ── URL 生成 ─────────────────────────────────────────────
 
-    def browse_url(self, user_path):
-        """网页浏览 URL（需要登录态）"""
-        real_path = self._to_real_path(user_path)
-        return f"{self.url}{real_path}"
+    def _extract_urls(self, raw_url):
+        """从 raw_url 提取预览链接和下载直链"""
+        if not raw_url:
+            return None, None
+        # raw_url 格式: {url}/p{path}?sign={sign}
+        # 预览链接: {url}{path} (去掉 /p 前缀和 ?sign)
+        # 下载直链: raw_url 本身
+        parsed = urllib.parse.urlparse(raw_url)
+        path = parsed.path  # /p/storage/...
+        if path.startswith('/p'):
+            preview_path = path[2:]  # /storage/...
+        else:
+            preview_path = path
+        preview_url = f"{parsed.scheme}://{parsed.netloc}{preview_path}"
+        return preview_url, raw_url
 
     # ── HTTP 请求（带自动刷新） ───────────────────────────────
 
@@ -232,9 +243,10 @@ class AList:
         print(f"   修改: {f.get('modified', '')}")
         # URL 输出
         raw_url = f.get('raw_url', '')
-        print(f"   网页浏览: {self.browse_url(path)} (需登录)")
         if not f['is_dir'] and raw_url:
-            print(f"   直链: {raw_url}")
+            preview, download = self._extract_urls(raw_url)
+            print(f"   预览: {preview}")
+            print(f"   下载: {download}")
         return f
 
     def mkdir(self, path):
@@ -270,11 +282,11 @@ class AList:
                 "path": real_path, "password": ""
             })
             if file_info['code'] == 200:
-                f = file_info['data']
-                raw_url = f.get('raw_url', '')
-                print(f"   网页浏览: {self.browse_url(remote_path)} (需登录)")
+                raw_url = file_info['data'].get('raw_url', '')
                 if raw_url:
-                    print(f"   直链: {raw_url}")
+                    preview, download = self._extract_urls(raw_url)
+                    print(f"   预览: {preview}")
+                    print(f"   下载: {download}")
             return True
         print(f"❌ {data['message']}")
         return False
@@ -351,11 +363,11 @@ class AList:
 
         f = data['data']
         print(f"📄 {f['name']}")
-        print(f"   网页浏览: {self.browse_url(path)} (需登录)")
-        if not f['is_dir']:
-            raw_url = f.get('raw_url', '')
-            if raw_url:
-                print(f"   直链: {raw_url}")
+        raw_url = f.get('raw_url', '')
+        if not f['is_dir'] and raw_url:
+            preview, download = self._extract_urls(raw_url)
+            print(f"   预览: {preview}")
+            print(f"   下载: {download}")
         return f
 
     @staticmethod
