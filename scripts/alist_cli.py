@@ -144,8 +144,8 @@ class AList:
 
     def _to_real_path(self, user_path):
         user_path = user_path.lstrip('/')
-        if self.base_path:
-            return f"{self.base_path}/{user_path}".rstrip('/')
+        if self.base_path and self.base_path != '/':
+            return f"{self.base_path.rstrip('/')}/{user_path}".rstrip('/')
         return f"/{user_path}".rstrip('/') or '/'
 
     def _to_user_path(self, real_path):
@@ -160,12 +160,12 @@ class AList:
         if not raw_url:
             return None, None
         # raw_url 格式: {url}/p{path}?sign={sign}
-        # 预览链接: {url}{path} (去掉 /p 前缀和 ?sign)
+        # 预览链接: {url}{path} (去掉 /p 前缀和 ?sign=xxx)
         # 下载直链: raw_url 本身
         parsed = urllib.parse.urlparse(raw_url)
-        path = parsed.path  # /p/storage/...
+        path = parsed.path  # /p/private/storage/file.txt
         if path.startswith('/p'):
-            preview_path = path[2:]  # /storage/...
+            preview_path = path[2:]  # /private/storage/file.txt
         else:
             preview_path = path
         preview_url = f"{parsed.scheme}://{parsed.netloc}{preview_path}"
