@@ -1,8 +1,8 @@
 ---
 name: alist-cli
-version: 1.1.3
+version: 1.2.0
 description: |
-  AList file management CLI for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search.
+  AList file management CLI for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search, url.
   Auth via environment variables with auto-refresh. Trigger: file management, AList operations, upload/download.
 ---
 
@@ -76,13 +76,60 @@ python3 scripts/alist_cli.py <command> [args]
 |---------|-------------|
 | `login [username] [password]` | Login (outputs export statements to source) |
 | `ls [path]` | List files |
-| `get <path>` | Get file info + raw URL |
+| `get <path>` | Get file info + all URLs |
+| `url <path>` | Get browse/preview/download URLs for file or folder |
 | `mkdir <path>` | Create folder |
-| `upload <local> <remote>` | Upload file (outputs signed URL) |
+| `upload <local> <remote>` | Upload file (outputs browse + download URL) |
 | `rm <path>` | Delete file |
 | `mv <src> <dst>` | Move file |
 | `search <keyword> [path]` | Search files |
 | `whoami` | Current user info |
+
+## URL Rules
+
+AList 有三种 URL 类型，本工具自动生成正确的 URL：
+
+### 1. 网页浏览 URL（永久有效）
+
+```
+{ALIST_URL}/#/{real_path}
+```
+
+- AList 前端是 Vue SPA，使用 hash router
+- `real_path` = `base_path` + `user_path`（去掉前导 `/`）
+- 例: `https://cloud.example.com/#/storage/docs/notes.md`
+- **推荐分享链接**：永久有效，可直接在浏览器打开浏览文件
+
+### 2. 预览直链（临时，需签名）
+
+```
+{ALIST_URL}/d{real_path}?sign={sign}
+```
+
+- 用于在线预览（嵌入 iframe 等）
+- sign 由服务端生成，有时效性
+- 例: `https://cloud.example.com/d/storage/docs/notes.md?sign=abc123=:0`
+
+### 3. 下载直链（临时，需签名）
+
+```
+{ALIST_URL}/p{real_path}?sign={sign}
+```
+
+- 用于直接下载文件（curl/wget 可用）
+- sign 由服务端生成，有时效性
+- 例: `https://cloud.example.com/p/storage/docs/notes.md?sign=abc123=:0`
+
+### Path Mapping
+
+```
+user_path (用户输入)  →  _to_real_path()  →  real_path (AList API 使用)
+/storage/docs/a.md   →  base_path=/storage  →  /storage/storage/docs/a.md
+```
+
+- `base_path` 通过登录自动获取（`/api/me` 接口）
+- 用户路径中的 `base_path` 前缀会被保留并叠加
+- 网页浏览和签名 URL 均基于 `real_path`
 
 ## Auth Behavior
 

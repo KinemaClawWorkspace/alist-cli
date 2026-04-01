@@ -11,6 +11,7 @@ Usage:
     alist rm <path>
     alist mv <src> <dst>
     alist search <keyword> [path]
+    alist url <path>
     alist whoami
 
 Note:
@@ -19,6 +20,12 @@ Note:
     - 脚本自动处理 base_path 转换
     - Token 过期时自动重新登录
     - 依赖：requests（需预先安装）
+
+URL 拼接规则:
+    - 网页浏览: {ALIST_URL}/#/{real_path}  (AList 前端 SPA hash router)
+    - 预览直链: {ALIST_URL}/d{real_path}?sign={sign}  (需要签名，临时有效)
+    - 下载直链: {ALIST_URL}/p{real_path}?sign={sign}  (需要签名，临时有效)
+    其中 real_path = base_path + user_path
 """
 
 import argparse
@@ -146,6 +153,26 @@ class AList:
             return real_path[len(self.base_path):] or '/'
         return real_path
 
+    # ── URL 生成 ─────────────────────────────────────────────
+
+    def browse_url(self, user_path):
+        """网页浏览 URL (AList 前端 SPA hash router)"""
+        real_path = self._to_real_path(user_path)
+        return f"{self.url}/#/{real_path.lstrip('/')}"
+
+    def _make_signed_url(self, real_path, sign, prefix):
+        """生成带签名的预览/下载 URL"""
+        if sign:
+            return f"{self.url}/{prefix}{real_path}?sign={sign}"
+        return f"{self.url}/{prefix}{real_path}"
+
+    @staticmethod
+    def _resolve_real_path_for_item(item):
+        """从 fs/get 或 fs/list 返回的 item 中提取 real_path"""
+        parent = item.get('parent', '')
+        name = item.get('name', '')
+        return f"{parent}/{name}".rstrip('/') if parent else f"/{name}"
+
     # ── HTTP 请求（带自动刷新） ───────────────────────────────
 
     def _request(self, method, endpoint, **kwargs):
@@ -216,8 +243,15 @@ class AList:
         print(f"   大小: {self._format_size(f.get('size', 0))}")
         print(f"   类型: {'文件夹' if f['is_dir'] else '文件'}")
         print(f"   修改: {f.get('modified', '')}")
-        if f.get('raw_url'):
-            print(f"   直链: {f['raw_url']}")
+        # URL 输出
+        sign = f.get('sign', '')
+        print(f"   网页浏览: {self.browse_url(path)}")
+        if not f['is_dir']:
+            if sign:
+                print(f"   预览直链: {self._make_signed_url(real_path, sign, 'd')}")
+                print(f"   下载直链: {self._make_signed_url(real_path, sign, 'p')}")
+            elif f.get('raw_url'):
+                print(f"   直链: {f['raw_url']}")
         return f
 
     def mkdir(self, path):
@@ -252,10 +286,14 @@ class AList:
             file_info = self._request('POST', '/api/fs/get', json={
                 "path": real_path, "password": ""
             })
-            if file_info['code'] == 200 and file_info['data'].get('raw_url'):
-                print(f"   访问链接: {file_info['data']['raw_url']}")
-            else:
-                print(f"   访问链接: {self.url}/p{real_path}")
+            if file_info['code'] == 200:
+                f = file_info['data']
+                sign = f.get('sign', '')
+                print(f"   网页浏览: {self.browse_url(remote_path)}")
+                if sign:
+                    print(f"   下载直链: {self._make_signed_url(real_path, sign, 'p')}")
+                elif f.get('raw_url'):
+                    print(f"   直链: {f['raw_url']}")
             return True
         print(f"❌ {data['message']}")
         return False
@@ -320,6 +358,26 @@ class AList:
             print(f"  {icon} {user_parent}/{f['name']}")
         return files
 
+    def get_urls(self, path):
+        """输出文件/文件夹的所有可用 URL"""
+        real_path = self._to_real_path(path)
+        data = self._request('POST', '/api/fs/get', json={
+            "path": real_path, "password": ""
+        })
+        if data['code'] != 200:
+            print(f"❌ {data['message']}")
+            return None
+
+        f = data['data']
+        print(f"📄 {f['name']}")
+        print(f"   网页浏览: {self.browse_url(path)}")
+        if not f['is_dir']:
+            sign = f.get('sign', '')
+            if sign:
+                print(f"   预览直链: {self._make_signed_url(real_path, sign, 'd')}")
+                print(f"   下载直链: {self._make_signed_url(real_path, sign, 'p')}")
+        return f
+
     @staticmethod
     def _format_size(size):
         for unit in ['B', 'KB', 'MB', 'GB']:
@@ -331,7 +389,7 @@ class AList:
 
 def main():
     parser = argparse.ArgumentParser(description="AList CLI - 文件管理工具")
-    parser.add_argument("command", choices=["login", "ls", "get", "mkdir", "upload", "rm", "mv", "search", "whoami"])
+    parser.add_argument("command", choices=["login", "ls", "get", "mkdir", "upload", "rm", "mv", "search", "url", "whoami"])
     parser.add_argument("args", nargs="*", help="命令参数")
 
     args = parser.parse_args()
@@ -383,6 +441,10 @@ def main():
         if not args.args:
             print("用法: alist search <keyword> [path]"); sys.exit(1)
         alist.search(args.args[0], args.args[1] if len(args.args) > 1 else "/")
+    elif args.command == "url":
+        if not args.args:
+            print("用法: alist url <path>"); sys.exit(1)
+        alist.get_urls(args.args[0])
 
 
 if __name__ == "__main__":
