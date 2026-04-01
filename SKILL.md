@@ -87,30 +87,27 @@ python3 scripts/alist_cli.py <command> [args]
 
 ## URL Rules
 
-AList 有两种 URL 类型：
+AList 文件有两种链接：
 
-### 1. 网页浏览 URL（需要登录态）
-
-```
-{ALIST_URL}{real_path}
-```
-
-- `real_path` = `base_path` + `user_path`（去掉前导 `/`）
-- 例: `https://cloud.example.com/storage/docs/notes.md`
-- ⚠️ 需要登录 AList 后才能访问，不能分享给未登录用户
-
-### 2. 直链（无需登录，签名认证，临时有效）
+### 1. 预览链接
 
 ```
-API 返回的 raw_url 字段
+{ALIST_URL}{path}
 ```
 
-- 由 AList 服务端生成，包含签名（sign 参数）
-- 无需登录即可下载/预览文件
-- 签名有时效性，过期后需重新获取
+- 从 raw_url 去掉 `/p` 前缀和 `?sign` 参数
+- 在浏览器中在线预览文件（需要 AList 登录态）
+- 例: `https://cloud.example.com/storage/storage/docs/notes.md`
+
+### 2. 下载直链
+
+```
+API 返回的 raw_url 字段（包含 /p/ 前缀和 ?sign 签名）
+```
+
+- 直接下载文件，无需登录，curl/wget 可用
+- 签名有时效性，过期后需重新通过 API 获取
 - 例: `https://cloud.example.com/p/storage/storage/docs/notes.md?sign=abc123=:0`
-- **推荐分享链接**：给他人分享文件时使用此链接
-- ⚠️ 不可手动拼接签名 URL，签名与完整路径绑定，必须使用 API 返回的 raw_url
 
 ### Path Mapping
 
