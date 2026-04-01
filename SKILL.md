@@ -10,6 +10,14 @@ description: |
 
 AList file management CLI. Auth token managed via environment variables with auto-login and auto-refresh.
 
+## ⚠️ Before First Use | 首次使用必读
+
+**首次使用此 skill 前，必须先读取 [ONBOARDING.md](ONBOARDING.md) 完成环境配置。**
+
+- **环境不可用**（命令不存在、依赖缺失、连接失败）→ 读取 [ONBOARDING.md](ONBOARDING.md) 按步骤排查修复
+- **首次配置** → 读取 [ONBOARDING.md](ONBOARDING.md) 完成 6 步配置
+- **配置完成后** → 直接使用下方 Run Commands
+
 ## Environment Variables
 
 | Variable | Required | Description |
@@ -19,22 +27,6 @@ AList file management CLI. Auth token managed via environment variables with aut
 | `ALIST_PASSWORD` | ✅ | Login password |
 | `ALIST_AUTH_TOKEN` | ❌ | Auth token (auto-obtained via login, skip manual set) |
 | `ALIST_USER_INFO` | ❌ | User info JSON (auto-obtained via login, skip manual set) |
-
-## Onboarding
-
-首次使用前，按 **[ONBOARDING.md](ONBOARDING.md)** 完成 6 步环境配置：
-
-1. 检查 Python 环境
-2. 安装 `requests` 依赖
-3. 创建 `alist-cli` 命令（symlink）
-4. 配置 `ALIST_URL` / `ALIST_USERNAME` / `ALIST_PASSWORD`
-5. 验证连接（`alist-cli whoami`）
-6. 确认目录结构
-
-**一键安装（ClawHub）：**
-```
-clawhub install alist-cli
-```
 
 ## Run Commands
 
