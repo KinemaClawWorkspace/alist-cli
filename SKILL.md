@@ -1,7 +1,7 @@
 ---
 name: alist-cli
 displayName: "AList CLI (Cloud Storage CLI for AList)"
-version: 1.6.1
+version: 1.6.2
 description: |
   AList file management CLI for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search, url.
   Auth via environment variables with auto-refresh. Trigger: file management, AList operations, upload/download.
@@ -36,9 +36,7 @@ AList file management CLI. Auth token managed via environment variables with aut
 ## Run Commands
 
 ```bash
-python3 scripts/alist_cli.py <command> [args]
-# or with venv:
-# .venv/bin/python scripts/alist_cli.py <command> [args]
+alist-cli <command> [args]
 ```
 
 ### Commands
