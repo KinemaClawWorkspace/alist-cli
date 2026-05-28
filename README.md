@@ -1,88 +1,67 @@
 # AList CLI for OpenClaw
 
-> **ClawHub**: https://clawhub.ai/leeshunee/alist-cli | `clawhub install alist-cli`
-
-
-基于 AList API 的文件管理工具，供 OpenClaw AI 助手使用。
+基于 AList API 的文件管理 CLI 工具，支持上传、下载、搜索、直链获取，认证令牌自动管理。
 
 ## 功能
 
-- 登录认证
-- 文件列表/浏览
 - 文件上传/下载
-- 创建文件夹
-- 删除/移动文件
-- 搜索文件
-- 获取文件直链
+- 文件列表浏览
+- 创建文件夹、删除、移动文件
+- 文件搜索
+- 获取文件预览链接和下载直链
+- 自动登录认证 + 令牌自动刷新
 
-## 安装
+## 适用场景
 
-```bash
-# 1. 克隆仓库
-git clone https://github.com/KinemaClawWorkspace/alist-cli.git
-cd alist-cli
+- 通过对话管理 AList 云存储文件
+- 上传文件并获取分享链接
+- 搜索和浏览远程存储
 
-# 2. 安装依赖
-pip install -r requirements.txt
+## 使用方式
 
-# 3. 配置环境变量
-export ALIST_URL="https://your-alist-server"
-export ALIST_USERNAME="your_username"
-export ALIST_PASSWORD="your_password"
+本 skill 为 OpenClaw/Claude Code 技能，安装后可通过对话触发：
+
+```
+上传这个文件到云存储
+帮我看看 /public/docs 下有什么文件
+搜索一下 xxx 相关的文件
+把文件分享给别人
 ```
 
-## 配置
+首次使用需完成 [ONBOARDING.md](ONBOARDING.md) 配置（设置环境变量和安装脚本）。
 
-设置环境变量：
-
-```bash
-export ALIST_URL="https://your-alist-server"
-export ALIST_USERNAME="your_username"
-export ALIST_PASSWORD="your_password"
-```
-
-## 使用
-
-```bash
-alist login
-alist ls /
-alist upload local.txt /remote.txt
-alist get /file.txt
-alist mkdir /folder
-alist rm /file.txt
-alist mv /old /new
-alist search keyword
-alist whoami
-```
-
-## CLI 选项
+## 命令列表
 
 | 命令 | 说明 |
 |------|------|
-| login <user> <pass> | 登录 |
-| ls [path] | 列出文件 |
-| get <path> | 获取文件信息 |
-| mkdir <path> | 创建文件夹 |
-| upload <local> <remote> | 上传文件 |
-| rm <path> | 删除文件 |
-| mv <src> <dst> | 移动文件 |
-| search <keyword> [path] | 搜索 |
-| whoami | 当前用户 |
+| `login` | 登录认证 |
+| `ls [path]` | 列出文件 |
+| `upload <local> <remote>` | 上传文件 |
+| `get <path>` | 获取文件信息 |
+| `url <path>` | 获取预览/下载链接 |
+| `mkdir <path>` | 创建文件夹 |
+| `rm <path>` | 删除文件 |
+| `mv <src> <dst>` | 移动文件 |
+| `search <keyword>` | 搜索文件 |
+| `whoami` | 当前用户 |
 
 ## 项目结构
 
 ```
 alist-cli/
-├── README.md
 ├── SKILL.md
-├── LICENSE
-├── requirements.txt
+├── ONBOARDING.md
 ├── scripts/
 │   └── alist_cli.py
 └── references/
     └── openapi.json
 ```
 
-## License
+## 作者
 
-CC BY 4.0 - 必须著名来源，允许自由使用
+- **Author**: [LeeShunEE](https://github.com/LeeShunEE)
+- **Organization**: [KinemaClawWorkspace](https://github.com/KinemaClawWorkspace)
+
+## 许可证
+
+[GNU General Public License v3.0](LICENSE)
