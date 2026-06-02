@@ -17,10 +17,10 @@ AList file management CLI. Auth token managed via environment variables with aut
 
 ## ⚠️ Before First Use | 首次使用必读
 
-**首次使用此 skill 前，必须先读取 [ONBOARDING.md](ONBOARDING.md) 完成环境配置。**
+**首次使用此 skill 前，必须先读取 [references/ONBOARDING.md](references/ONBOARDING.md) 完成环境配置。**
 
-- **环境不可用**（命令不存在、依赖缺失、连接失败）→ 读取 [ONBOARDING.md](ONBOARDING.md) 按步骤排查修复
-- **首次配置** → 读取 [ONBOARDING.md](ONBOARDING.md) 完成 6 步配置
+- **环境不可用**（命令不存在、依赖缺失、连接失败）→ 读取 [references/ONBOARDING.md](references/ONBOARDING.md) 按步骤排查修复
+- **首次配置** → 读取 [references/ONBOARDING.md](references/ONBOARDING.md) 完成 6 步配置
 - **配置完成后** → 直接使用下方 Run Commands
 
 ## Environment Variables

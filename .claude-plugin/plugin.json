@@ -1,0 +1,21 @@
+{
+  "name": "alist-cli",
+  "displayName": "AList CLI (Cloud Storage CLI for AList)",
+  "version": "1.6.2",
+  "description": "AList file management CLI for OpenClaw. Supports upload, download, list, mkdir, rm, mv, search, url. Auth via environment variables with auto-refresh.",
+  "author": {
+    "name": "LeeShunEE",
+    "url": "https://github.com/LeeShunEE"
+  },
+  "homepage": "https://github.com/KinemaClawWorkspace/alist-cli",
+  "repository": "https://github.com/KinemaClawWorkspace/alist-cli",
+  "license": "GPL-3.0",
+  "keywords": [
+    "alist",
+    "cli",
+    "cloud-storage",
+    "file-management",
+    "upload",
+    "download"
+  ]
+}
